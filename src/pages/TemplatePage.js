@@ -5,6 +5,7 @@ import NavBar1 from "../components/NavBar1";
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress'; // Import the CircularProgress component
 import '../styles/App.css';
+import Footer from '../components/Footer';
 
 export default function TemplatePage() {
   const [templates, setTemplates] = useState([]);
@@ -74,7 +75,7 @@ export default function TemplatePage() {
     <>
       <NavBar1 />
 
-      <div className="template-container" style={{ marginLeft: '20px', marginTop: '100px', marginRight: '20px' }}>
+      <div className="template-container" style={{ marginLeft: '20px', marginTop: '100px', marginRight: '20px', marginBottom: '30px' }}>
         <div className="homepage-header">
           <h1>Email Templates</h1>
           <button className="new-template-button" onClick={handleNewTemplate}>
@@ -118,6 +119,7 @@ export default function TemplatePage() {
           </div>
         )}
       </div>
+      <Footer/>
     </>
   );
 }

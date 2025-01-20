@@ -8,6 +8,7 @@ import { faBold, faItalic, faUnderline, faAlignLeft, faAlignJustify, faAlignCent
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Alert from '@mui/material/Alert';
+import Footer from '../components/Footer'
 
 
 
@@ -181,37 +182,77 @@ export default function TemplateEditorPage() {
 
   // image upload 
 
+  // const handleImageUpload = async (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const formData = new FormData();
+  //     formData.append("image", file);
+
+  //     try {
+  //       const res = await uploadImage(formData); // Call the backend API
+  //       const uploadedImageUrl = res.data.imageUrl; // Get the relative path from the response
+
+  //       setTemplate((prev) => ({
+  //         ...prev,
+  //         imageURL: [...prev.imageURL, uploadedImageUrl], // Add the relative path to the array
+  //       }));
+
+  //       setAlertMessage("Image Uploaded...");
+
+  //       setTimeout(() => {
+  //         setAlertMessage(""); // Reset alert message
+  //       }, 3000);
+  //     } catch (error) {
+  //       console.error("Error uploading image:", error);
+
+  //       setAlertMessage("Failed to upload the image. Please try again..");
+
+  //       setTimeout(() => {
+  //         setAlertMessage(""); // Reset alert message
+  //       }, 3000);
+  //     }
+  //   }
+  // };
+
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
       const formData = new FormData();
       formData.append("image", file);
-
+  
       try {
-        const res = await uploadImage(formData); // Call the backend API
-        const uploadedImageUrl = res.data.imageUrl; // Get the relative path from the response
-
-        setTemplate((prev) => ({
-          ...prev,
-          imageURL: [...prev.imageURL, uploadedImageUrl], // Add the relative path to the array
-        }));
-
-        setAlertMessage("Image Uploaded...");
-
-        setTimeout(() => {
-          setAlertMessage(""); // Reset alert message
-        }, 3000);
+        // Replace with your actual backend API URL
+        const res = await uploadImage(formData);  // Call your backend API
+        if (res && res.data && res.data.imageUrl) {
+          const uploadedImageUrl = res.data.imageUrl; // Ensure the server response contains the correct image URL
+          
+          // Save the image URL in the state
+          setTemplate((prev) => ({
+            ...prev,
+            imageURL: [...prev.imageURL, uploadedImageUrl],
+          }));
+  
+          setAlertMessage("Image uploaded successfully.");
+  
+          // Reset alert after 3 seconds
+          setTimeout(() => {
+            setAlertMessage("");
+          }, 3000);
+        } else {
+          setAlertMessage("Image upload failed. No URL received.");
+        }
       } catch (error) {
         console.error("Error uploading image:", error);
-
-        setAlertMessage("Failed to upload the image. Please try again..");
-
+        setAlertMessage("Failed to upload image. Please try again.");
+  
         setTimeout(() => {
-          setAlertMessage(""); // Reset alert message
+          setAlertMessage("");
         }, 3000);
       }
     }
   };
+  
+
 
   const handleRemoveImage = (index) => {
     setTemplate((prev) => {
@@ -280,13 +321,14 @@ export default function TemplateEditorPage() {
           ></footer>
 
           {/* Render image gallery */}
+          {/* Render image gallery */}
           {template.imageURL && template.imageURL.length > 0 ? (
             <div className="image-gallery">
               {template.imageURL.map((url, index) => (
                 <div key={index} className="image-container">
                   <img
-                    src={url}
-                    alt={`Uploaded Image ${index + 1}`}
+                    src={url}  // Use the image URL
+                    alt={`Uploaded Image ${index + 1}`}  // Alt text for the image
                     className="template-image"
                   />
                   <button
@@ -406,29 +448,49 @@ export default function TemplateEditorPage() {
           </div>
 
           {/* Add Upload Image Input */}
-          <div className="editor-control">
-            <label>Upload Image:</label>
+          <div className="editor-control" style={{ marginBottom: '15px' }}>
+            <label style={{ fontWeight: 'bold', marginRight: '10px' }}>Upload Image:</label>
             <input
               type="file"
               accept="image/*"
               ref={fileInputRef}
               onChange={handleImageUpload}
+              style={{
+                display: 'none', // Hide default file input button
+              }}
+              id="fileInput"
             />
+            <button
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#218838',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                transition: 'background-color 0.3s ease', // Smooth transition for background color
+              }}
+              onClick={() => document.getElementById('fileInput').click()} // Trigger file input click on button click
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#2bbb33'} // Change color on hover
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#218838'} // Revert color on mouse leave
+            >
+              Choose File
+            </button>
           </div>
 
 
-
-          <button onClick={applyTextStyles} className="apply-button">
-            Apply Changes
-          </button>
-
-
-
-          <button onClick={handleSave} className="save-button">
-            Save Template
-          </button>
+          <div style={{ display: 'inline-flex', gap: '40px' }}>
+            <button onClick={applyTextStyles} className="apply-button" style={{ marginLeft: '60px' }}>
+              Apply Changes
+            </button>
+            <button onClick={handleSave} className="save-button">
+              Save Template
+            </button>
+          </div>
         </div>
       </div>
+      <Footer />
     </Navbar2>
   );
 }
