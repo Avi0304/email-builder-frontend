@@ -1,0 +1,18 @@
+.hero-header header{
+    background-size: cover;
+    background-position: center;
+    background-image:  linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('../assets/bg5.jpg');
+}
+
+.custom-btn {
+    border-radius: 50px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.custom-btn:hover {
+    background-color: #e0a800; /* Darker yellow for the hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}
+
+
